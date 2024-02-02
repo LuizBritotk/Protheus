@@ -7,6 +7,8 @@ using Infraestrutura.Data;
 using Microsoft.EntityFrameworkCore;
 using Dominio.Repositorio;
 using Aplicacao.Servicos;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 namespace Protheus
 {
@@ -51,7 +53,6 @@ namespace Protheus
             services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
             services.AddScoped<IUsuario, Usuario>();
 
-            // Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -76,6 +77,7 @@ namespace Protheus
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Protheus API");
                 c.RoutePrefix = String.Empty;
             });
+            
 
             app.UseHttpsRedirection();
 
