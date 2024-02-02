@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
-using Aplicacao.Servicos;
 using Infraestrutura.Data;
 using Microsoft.EntityFrameworkCore;
 using Dominio.Repositorio;
+using Aplicacao.Servicos;
 
 namespace Protheus
 {
@@ -22,10 +23,9 @@ namespace Protheus
         {
             services.AddCors();
             services.AddMvc();
-            //services.AddControllers();
 
             // Autenticação
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+            var key = Encoding.ASCII.GetBytes(Configuration["JwtSettings:Secret"]);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -44,15 +44,14 @@ namespace Protheus
                 };
             });
 
-            services.AddDbContext<VendasDb>(options =>
-            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            // Configuração do Banco de Dados
+            services.AddDbContext<PostgreDb>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDbContext<UsuarioDb>(options =>
-            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+            services.AddScoped<IUsuario, Usuario>();
 
-            services.AddScoped<IVendaRepositorio, VendaRepositorio>();
-            services.AddScoped<IVendaServico, VendaServico>();
-
+            // Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo

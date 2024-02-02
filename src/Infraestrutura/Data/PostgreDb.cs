@@ -3,16 +3,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infraestrutura.Data
 {
-    public class VendasDb : DbContext
+    public class PostgreDb : DbContext
     {
-        public DbSet<Venda> Vendas { get; set; }
+        public DbSet<UsuarioAPI> UsuarioAPI { get; set; }
 
-        public VendasDb(DbContextOptions<VendasDb> options) : base(options)
+        public PostgreDb(DbContextOptions<PostgreDb> options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<UsuarioAPI>().HasKey(usuario => usuario.Codigo);
+
             base.OnModelCreating(modelBuilder);
         }
     }

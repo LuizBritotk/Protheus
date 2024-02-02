@@ -1,8 +1,8 @@
 ﻿using Dominio.Entidades;
 
-namespace Dominio.Repositorio
+namespace Aplicacao.Servicos
 {
-    public interface IUsuarioRepositorio
+    public interface IUsuario
     {
         Task InserirUsuarioAsync(UsuarioAPI usuario);
         Task AtualizarUsuarioAsync(UsuarioAPI usuario);
@@ -11,4 +11,3 @@ namespace Dominio.Repositorio
         Task<UsuarioAPI> ObterUsuarioAsync(string login, string senha);
     }
 }
-    
